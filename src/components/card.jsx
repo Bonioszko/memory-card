@@ -42,9 +42,10 @@ const getImgApi = async (id) => {
   }
 };
 
-function Card({ number }) {
+function Card({ number, change, shufleCards, restart }) {
   const [pokemon, setPokemon] = useState(new Pokemon("", "", ""));
   const [clicked, setClicked] = useState(false);
+  const [miss, setMiss] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const result = await getImgApi(number);
@@ -56,7 +57,13 @@ function Card({ number }) {
     fetchData();
   }, [number]);
   const handleClick = () => {
-    setClicked(!clicked);
+    if (!clicked) {
+      setClicked(!clicked);
+      change();
+      shufleCards();
+    } else {
+      restart();
+    }
   };
   return (
     <div className={`card ${clicked ? "clicked" : ""}`} onClick={handleClick}>
